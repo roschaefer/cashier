@@ -11,6 +11,6 @@
     <button class="h-16 bg-gray-500 font-extrabold">3</button>
     <button class="h-16 bg-gray-500 font-extrabold">d</button>
     <button class="h-16 bg-gray-500 font-extrabold">0</button>
-    <button disabled class="h-16 bg-gray-500 font-extrabold"></button>
+    <button disabled class="h-16 bg-gray-500 font-extrabold" />
   </div>
 </template>
