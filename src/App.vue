@@ -5,7 +5,7 @@
     </nav>
     <div class="flex-grow">
       <div class="h-full md:w-1/2 mx-auto flex flex-col justify-center">
-        <Calculation />
+        <Calculation v-model:cost="cost" :given="given" />
       </div>
     </div>
 
@@ -30,10 +30,10 @@
 
 <script lang="ts">
 import "./index.css";
-import { defineComponent } from "vue";
-import NumPad from "./components/NumPad.vue";
-import Suggestions from "./components/Suggestions.vue";
-import Calculation from "./components/Calculation.vue";
+import { ref, defineComponent } from "vue";
+import NumPad from "./components/NumPad/NumPad.vue";
+import Suggestions from "./components/Suggestions/Suggestions.vue";
+import Calculation from "./components/Calculation/Calculation.vue";
 
 export default defineComponent({
   name: "App",
@@ -41,6 +41,11 @@ export default defineComponent({
     NumPad,
     Suggestions,
     Calculation,
+  },
+  setup() {
+    const cost = ref(0);
+    const given = ref(null);
+    return { given, cost };
   },
 });
 </script>
