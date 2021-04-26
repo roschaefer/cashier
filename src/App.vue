@@ -15,7 +15,7 @@
       <div class="md:w-1/4" />
       <div class="md:w-1/2 flex space-x-4">
         <Suggestions class="flex-1" />
-        <NumPad class="flex-1" />
+        <NumPad v-model:given="given" class="flex-1" />
       </div>
       <div class="md:w-1/4 flex justify-end items-end">
         <button
