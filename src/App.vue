@@ -10,10 +10,12 @@
     </div>
 
     <div
-      class="bg-gray-600 text-white p-6 py-8 flex flex-col md:flex-row space-y-4"
+      class="bg-gray-600 text-white p-6 py-8 flex flex-col space-y-4 md:space-y-0 md:flex-row"
     >
       <div class="md:w-1/4" />
-      <div class="md:w-1/2 flex space-x-4">
+      <div
+        class="md:w-1/2 flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-4"
+      >
         <template v-if="!Number.isInteger(change)">
           <Suggestions v-model:given="given" :cost="cost" class="flex-1" />
           <NumPad v-model:given="given" class="flex-1" />
@@ -33,7 +35,9 @@
           </button>
         </template>
       </div>
-      <div class="md:w-1/4 flex justify-end items-end">
+      <div
+        class="md:w-1/4 flex flex-col md:flex-row md:justify-end md:items-end"
+      >
         <button
           v-if="!Number.isInteger(change)"
           :disabled="!ready"
@@ -87,7 +91,7 @@ export default defineComponent({
       change.value = change.value ? undefined : given.value - cost.value;
     };
     const ready = computed(() => {
-      return Number.isInteger(given.value) && Number.isInteger(cost.value);
+      return given.value >= cost.value;
     });
     return { given, cost, change, pay, reset, ready };
   },

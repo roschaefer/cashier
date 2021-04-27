@@ -27,7 +27,7 @@ describe('App', () => {
       expect(wrapper.findComponent(NumPad).exists()).toBe(true)
     })
 
-    describe('`cost` and `given` is set', () => {
+    describe('`cost` > `given`', () => {
       beforeEach(() => {
         props = {
           initialData: {

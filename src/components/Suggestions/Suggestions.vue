@@ -4,7 +4,7 @@
       <button
         v-for="suggestion in suggestions"
         :key="suggestion"
-        class="flex-1 bg-gray-500 font-extrabold"
+        class="flex-1 py-2 bg-gray-500 font-extrabold"
         @click="$emit('update:given', suggestion)"
       >
         {{ format(suggestion) }}
