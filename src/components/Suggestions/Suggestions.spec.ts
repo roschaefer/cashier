@@ -11,14 +11,14 @@ describe('Suggestions', () => {
     })
 
     describe('given `cost`', () => {
-      it('6297 -> ["8000", "7000", "6500", "6300", "6297"]', () => {
+      it("6297 -> [ '80,00 €', '70,00 €', '65,00 €', '63,00 €', '62,97 €' ]", () => {
         const wrapper = mount(Suggestions, { props: { cost: 6297 } })
-        expect(wrapper.findAll('button').map(b => b.text())).toEqual(["8000", "7000", "6500", "6300", "6297"])
+        expect(wrapper.findAll('button').map(b => b.text())).toEqual([ '80,00 €', '70,00 €', '65,00 €', '63,00 €', '62,97 €' ])
       })
 
-      it('8990 ->  ["20000", "10000", "9000", "8990"]', () => {
+      it("8990 -> [ '200,00 €', '100,00 €', '90,00 €', '89,90 €' ]", () => {
         const wrapper = mount(Suggestions, { props: { cost: 8990} })
-        expect(wrapper.findAll('button').map(b => b.text())).toEqual(["20000", "10000", "9000", "8990"])
+        expect(wrapper.findAll('button').map(b => b.text())).toEqual([ '200,00 €', '100,00 €', '90,00 €', '89,90 €' ])
       })
     })
 

@@ -7,13 +7,14 @@
         class="flex-1 bg-gray-500 font-extrabold"
         @click="$emit('update:given', suggestion)"
       >
-        {{ suggestion }}
+        {{ format(suggestion) }}
       </button>
     </template>
   </div>
 </template>
 
 <script lang="ts">
+import { format } from "../Center/Center.vue";
 import { computed, defineComponent } from "vue";
 export default defineComponent({
   props: {
@@ -29,7 +30,7 @@ export default defineComponent({
         .slice(0, 5)
         .reverse();
     });
-    return { suggestions };
+    return { suggestions, format };
   },
 });
 </script>

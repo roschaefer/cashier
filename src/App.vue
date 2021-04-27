@@ -36,8 +36,12 @@
       <div class="md:w-1/4 flex justify-end items-end">
         <button
           v-if="!change"
-          :disabled="!(Number.isInteger(given) && Number.isInteger(cost))"
-          class="pay bg-green-500 text-white text-lg font-extrabold py-4 px-12 border-2 border-transparent hover:border-white"
+          :disabled="!ready"
+          class="pay text-white text-lg font-extrabold py-4 px-12 border-2 border-transparent"
+          :class="{
+            'bg-green-500 hover:border-white': ready,
+            'bg-gray-500 opacity-50 cursor-not-allowed': !ready,
+          }"
           @click="pay"
         >
           Zahlen
@@ -49,7 +53,7 @@
 
 <script lang="ts">
 import "./index.css";
-import { reactive, toRefs, defineComponent } from "vue";
+import { computed, reactive, toRefs, defineComponent } from "vue";
 import NumPad from "./components/NumPad/NumPad.vue";
 import Suggestions from "./components/Suggestions/Suggestions.vue";
 import Center from "./components/Center/Center.vue";
@@ -82,7 +86,10 @@ export default defineComponent({
     const pay = () => {
       change.value = change.value ? undefined : given.value - cost.value;
     };
-    return { given, cost, change, pay, reset };
+    const ready = computed(() => {
+      return Number.isInteger(given.value) && Number.isInteger(cost.value);
+    });
+    return { given, cost, change, pay, reset, ready };
   },
 });
 </script>

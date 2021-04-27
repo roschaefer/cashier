@@ -6,7 +6,7 @@
         v-if="!change"
         class="self-center w-full text-5xl text-center border-0"
         type="number"
-        placeholder="€0.00"
+        placeholder="0,00 €"
         :value="cost"
         @input="updateCost"
       />
@@ -37,6 +37,11 @@ const FORMAT = new Intl.NumberFormat("de-DE", {
   currency: "EUR",
 });
 
+export const format = (value: number) => {
+  if (!Number.isInteger(value)) return null;
+  return FORMAT.format(value / 100.0);
+};
+
 export default defineComponent({
   props: {
     cost: { type: Number, default: () => null },
@@ -50,10 +55,6 @@ export default defineComponent({
         "update:cost",
         Number((event.target as HTMLInputElement).value)
       );
-    };
-    const format = (value: number) => {
-      if (!Number.isInteger(value)) return null;
-      return FORMAT.format(value / 100.0);
     };
 
     return { updateCost, format };
