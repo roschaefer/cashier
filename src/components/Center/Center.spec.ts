@@ -54,13 +54,14 @@ describe('Center', () => {
     })
 
     describe('given `change`', () => {
-      beforeEach(() => {
-        props = {change: 34}
+      it('displays change', () => {
+        const wrapper = mount(Center, { props: { change: 34 } })
+        expect(wrapper.text()).toContain('Wechselgeld: 0,34 €')
       })
 
-      it('displays change', () => {
-        const wrapper = mount(Center, { props })
-        expect(wrapper.text()).toContain('Wechselgeld: 0,34 €')
+      it('accepts `change` == 0', () => {
+        const wrapper = mount(Center, { props: { change: 0 } })
+        expect(wrapper.text()).toContain('Wechselgeld: 0,00 €')
       })
     })
   })

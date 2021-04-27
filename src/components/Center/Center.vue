@@ -19,7 +19,10 @@
         {{ format(given) }}
       </span>
     </section>
-    <section v-if="change" class="change h-32 p-4 bg-white flex flex-col">
+    <section
+      v-if="Number.isInteger(change)"
+      class="change h-32 p-4 bg-white flex flex-col"
+    >
       Wechselgeld:
       <span class="self-center w-full text-5xl text-center border-0">
         {{ format(change) }}
@@ -58,7 +61,7 @@ export default defineComponent({
     });
 
     const updateCost = () => {
-      const { value } = currency(updatedCost.value, {
+      const { value } = currency(updatedCost.value as any, {
         separator: "",
         decimal: ",",
         symbol: "€",

@@ -14,7 +14,7 @@
     >
       <div class="md:w-1/4" />
       <div class="md:w-1/2 flex space-x-4">
-        <template v-if="!change">
+        <template v-if="!Number.isInteger(change)">
           <Suggestions v-model:given="given" :cost="cost" class="flex-1" />
           <NumPad v-model:given="given" class="flex-1" />
         </template>
@@ -35,7 +35,7 @@
       </div>
       <div class="md:w-1/4 flex justify-end items-end">
         <button
-          v-if="!change"
+          v-if="!Number.isInteger(change)"
           :disabled="!ready"
           class="pay text-white text-lg font-extrabold py-4 px-12 border-2 border-transparent"
           :class="{

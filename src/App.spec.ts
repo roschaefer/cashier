@@ -46,6 +46,14 @@ describe('App', () => {
     })
   })
 
+  describe('`change` == 0', () => {
+    it('displays back and next buttons', () => {
+      const wrapper = mount(App, { props: { initialData: { change: 0 } } })
+      expect(wrapper.find('button.back').exists()).toBe(true)
+      expect(wrapper.find('button.next').exists()).toBe(true)
+    })
+  })
+
   describe('`cost`, `given` and `change` is set', () => {
     beforeEach(() => {
       props = {
