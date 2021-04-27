@@ -7,7 +7,7 @@
         type="number"
         placeholder="€0.00"
         :value="cost"
-        @input="$emit('update:cost', Number($event.target.value))"
+        @input="updateCost"
       />
     </div>
     <div class="h-32 p-4 bg-white flex flex-col">
@@ -39,14 +39,23 @@ export default defineComponent({
     given: { type: Number, default: () => null },
   },
   emits: ["update:cost"],
-  setup(props) {
+  setup(props, context) {
     const change = computed(() => {
       if (!(Number.isInteger(props.cost) && Number.isInteger(props.given)))
         return null;
       return props.given - props.cost;
     });
+    const updateCost = (event: Event) => {
+      context.emit(
+        "update:cost",
+        Number((event.target as HTMLInputElement).value)
+      );
+    };
+    const format = (value: number) => {
+      return FORMAT.format(value / 100.0);
+    };
 
-    return { change, format: (value) => FORMAT.format(value / 100.0) };
+    return { change, updateCost, format };
   },
 });
 </script>

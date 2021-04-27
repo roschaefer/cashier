@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Calculation from './Calculation.vue'
 
-let props: { cost?: Number, given?: Number }
+let props: { given?: number; cost?: number; }
 
 describe('Calculation', () => {
   describe('costs', () => {

@@ -5,7 +5,7 @@ module.exports = {
     node: true,
   },
 
-  extends: ["plugin:vue/vue3-recommended", "eslint:recommended", 'plugin:prettier-vue/recommended'],
+  extends: ["plugin:vue/vue3-recommended", "eslint:recommended", '@vue/typescript', 'plugin:prettier-vue/recommended'],
 
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

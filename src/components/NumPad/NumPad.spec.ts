@@ -29,8 +29,8 @@ describe('NumPad', () => {
           expect(wrapper.emitted('update:given')).toEqual([[7]])
         })
 
-        it('null << 7 == 7', async () => {
-          const wrapper = mount(NumPad, { props: { given: null } })
+        it('undefined << 7 == 7', async () => {
+          const wrapper = mount(NumPad)
           await wrapper.get('button:first-child').trigger('click')
           expect(wrapper.emitted('update:given')).toEqual([[7]])
         })

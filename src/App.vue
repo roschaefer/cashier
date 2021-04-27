@@ -44,7 +44,7 @@ export default defineComponent({
   },
   setup() {
     const cost = ref(0);
-    const given = ref(null);
+    const given = ref(undefined);
     return { given, cost };
   },
 });

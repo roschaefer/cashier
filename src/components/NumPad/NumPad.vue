@@ -26,7 +26,7 @@ export default defineComponent({
   },
   emits: ["update:given"],
   setup(props, context) {
-    const push = (digit) => {
+    const push = (digit: number) => {
       context.emit(
         "update:given",
         Number([props.given || 0, digit].map(String).join(""))
