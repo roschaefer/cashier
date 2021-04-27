@@ -2,14 +2,13 @@
   <div class="space-y-1">
     <section class="cost h-32 p-4 bg-white flex flex-col">
       Zu zahlen:
-      <input
-        v-if="!change"
-        class="self-center w-full text-5xl text-center border-0"
-        type="number"
-        placeholder="0,00 €"
-        :value="cost"
-        @input="updateCost"
-      />
+      <form v-if="!change" @submit.prevent="updateCost" @focusout="updateCost">
+        <input
+          v-model="updatedCost"
+          class="self-center w-full text-5xl text-center border-0"
+          placeholder="0,00 €"
+        />
+      </form>
       <span v-else class="self-center w-full text-5xl text-center border-0">
         {{ format(cost) }}
       </span>
@@ -30,7 +29,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
+import currency from "currency.js";
 
 const FORMAT = new Intl.NumberFormat("de-DE", {
   style: "currency",
@@ -50,14 +50,24 @@ export default defineComponent({
   },
   emits: ["update:cost"],
   setup(props, context) {
-    const updateCost = (event: Event) => {
-      context.emit(
-        "update:cost",
-        Number((event.target as HTMLInputElement).value)
-      );
+    const updatedCost = ref(format(props.cost));
+
+    // TODO: remove workaround
+    watchEffect(() => {
+      updatedCost.value = format(props.cost);
+    });
+
+    const updateCost = () => {
+      const { value } = currency(updatedCost.value, {
+        separator: "",
+        decimal: ",",
+        symbol: "€",
+      });
+      context.emit("update:cost", value * 100);
+      updatedCost.value = format(value * 100);
     };
 
-    return { updateCost, format };
+    return { updateCost, format, updatedCost };
   },
 });
 </script>

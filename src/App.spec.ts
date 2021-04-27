@@ -65,7 +65,7 @@ describe('App', () => {
       })
 
       it('renders <input> with previous `cost`', () => {
-        expect((wrapper.find('section.cost input').element as HTMLInputElement).value).toEqual('765')
+        expect((wrapper.find('section.cost input').element as HTMLInputElement).value).toEqual('7,65 €')
       })
 
       it('renders section.given with previous `given`', async () => {

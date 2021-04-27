@@ -5,11 +5,12 @@ let props: { given?: number; cost?: number, change?: number; }
 
 describe('Center', () => {
   describe('costs', () => {
-    describe('@input', () => {
+    describe('@submit', () => {
       it('$emits `update:costs`', async () => {
         const wrapper = mount(Center)
-        const input = wrapper.get('input:first-child')
-        await input.setValue(123)
+        const form = wrapper.get('form')
+        form.get('input').setValue('1,23')
+        await form.trigger('submit')
         expect(wrapper.emitted('update:cost')).toEqual([[123]])
       })
     })
