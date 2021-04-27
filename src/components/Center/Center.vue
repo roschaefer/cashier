@@ -1,32 +1,36 @@
 <template>
   <div class="space-y-1">
-    <div class="h-32 p-4 bg-white flex flex-col">
+    <section class="cost h-32 p-4 bg-white flex flex-col">
       Zu zahlen:
       <input
+        v-if="!change"
         class="self-center w-full text-5xl text-center border-0"
         type="number"
         placeholder="€0.00"
         :value="cost"
         @input="updateCost"
       />
-    </div>
-    <div class="h-32 p-4 bg-white flex flex-col">
+      <span v-else class="self-center w-full text-5xl text-center border-0">
+        {{ format(cost) }}
+      </span>
+    </section>
+    <section class="given h-32 p-4 bg-white flex flex-col">
       Gegeben:
       <span class="self-center w-full text-5xl text-center border-0">
         {{ format(given) }}
       </span>
-    </div>
-    <div v-if="change" class="h-32 p-4 bg-white flex flex-col">
+    </section>
+    <section v-if="change" class="change h-32 p-4 bg-white flex flex-col">
       Wechselgeld:
       <span class="self-center w-full text-5xl text-center border-0">
         {{ format(change) }}
       </span>
-    </div>
+    </section>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 
 const FORMAT = new Intl.NumberFormat("de-DE", {
   style: "currency",
@@ -37,14 +41,10 @@ export default defineComponent({
   props: {
     cost: { type: Number, default: () => null },
     given: { type: Number, default: () => null },
+    change: { type: Number, default: () => null },
   },
   emits: ["update:cost"],
   setup(props, context) {
-    const change = computed(() => {
-      if (!(Number.isInteger(props.cost) && Number.isInteger(props.given)))
-        return null;
-      return props.given - props.cost;
-    });
     const updateCost = (event: Event) => {
       context.emit(
         "update:cost",
@@ -52,10 +52,11 @@ export default defineComponent({
       );
     };
     const format = (value: number) => {
+      if (!Number.isInteger(value)) return null;
       return FORMAT.format(value / 100.0);
     };
 
-    return { change, updateCost, format };
+    return { updateCost, format };
   },
 });
 </script>
