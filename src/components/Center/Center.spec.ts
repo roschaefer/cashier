@@ -1,47 +1,35 @@
 import { mount } from '@vue/test-utils'
 import Center from './Center.vue'
 
-let props: { given?: number; cost?: number, change?: number; }
+let props: { given?: number; cost?: number, change?: number; selected?: string }
 
 describe('Center', () => {
-  describe('costs', () => {
-    describe('@submit', () => {
-      it('$emits `update:costs`', async () => {
-        const wrapper = mount(Center)
-        const form = wrapper.get('form')
-        form.get('input').setValue('1,23')
-        await form.trigger('submit')
-        expect(wrapper.emitted('update:cost')).toEqual([[123]])
+  describe('label.cost', () => {
+    it('displays <input>', () => {
+      const wrapper = mount(Center, { props })
+      expect(wrapper.get('label.cost').find('input').exists()).toBe(true)
+    })
+
+    describe("when selected === 'cost'", () => {
+      it('highlights label.cost', () => {
+        props = { selected: 'cost' }
+        const wrapper = mount(Center, { props })
+        expect(wrapper.get('label.cost').attributes('class')).toContain('border-double')
+        expect(wrapper.get('label.given').attributes('class')).not.toContain('border-double')
+      })
+    })
+
+    describe("when selected === 'given'", () => {
+      it('highlights label.given', () => {
+        props = { selected: 'given' }
+        const wrapper = mount(Center, { props })
+        expect(wrapper.get('label.cost').attributes('class')).not.toContain('border-double')
+        expect(wrapper.get('label.given').attributes('class')).toContain('border-double')
       })
     })
   })
 
-  describe('section.cost', () => {
-    describe('without `change`', () => {
-      beforeEach(() => {
-        props = {}
-      })
-
-      it('displays <input>', () => {
-        const wrapper = mount(Center, { props })
-        expect(wrapper.get('section.cost').find('input').exists()).toBe(true)
-      })
-    })
-
-    describe('given `change`', () => {
-      beforeEach(() => {
-        props = { change: 34 }
-      })
-
-      it('replaces <input> with <span>', () => {
-        const wrapper = mount(Center, { props })
-        expect(wrapper.find('input').exists()).toBe(false)
-        expect(wrapper.get('section.cost').find('span').exists()).toBe(true)
-      })
-    })
-  })
-
-  describe('section.change', () => {
+  describe('label.change', () => {
     describe('without `change`', () => {
       beforeEach(() => {
         props = {}
@@ -54,14 +42,33 @@ describe('Center', () => {
     })
 
     describe('given `change`', () => {
-      it('displays change', () => {
-        const wrapper = mount(Center, { props: { change: 34 } })
-        expect(wrapper.text()).toContain('Wechselgeld: 0,34 €')
+      beforeEach(() => {
+        props = { change: 34 }
       })
 
-      it('accepts `change` == 0', () => {
-        const wrapper = mount(Center, { props: { change: 0 } })
-        expect(wrapper.text()).toContain('Wechselgeld: 0,00 €')
+      it('displays change', () => {
+        const wrapper = mount(Center, { props })
+        expect(wrapper.text()).toContain('Wechselgeld:')
+      })
+
+      it('set change as input[value]', () => {
+        const wrapper = mount(Center, { props })
+        expect((wrapper.find('label.change input').element as HTMLInputElement).value).toEqual('0,34 €')
+      })
+    })
+
+    describe('edge case `change` === 0', () => {
+      beforeEach(() => {
+        props = { change: 0 }
+      })
+      it('displays change', () => {
+        const wrapper = mount(Center, { props })
+        expect(wrapper.text()).toContain('Wechselgeld:')
+      })
+
+      it('set change as input[value]', () => {
+        const wrapper = mount(Center, { props })
+        expect((wrapper.find('label.change input').element as HTMLInputElement).value).toEqual('0,00 €')
       })
     })
   })

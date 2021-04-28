@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 grid-rows-4 gap-1">
+  <section class="grid grid-cols-3 grid-rows-4 gap-1">
     <button class="h-16 bg-gray-500 font-extrabold" @click="push(7)">7</button>
     <button class="h-16 bg-gray-500 font-extrabold" @click="push(8)">8</button>
     <button class="h-16 bg-gray-500 font-extrabold" @click="push(9)">9</button>
@@ -26,11 +26,23 @@
       </svg>
     </button>
     <button class="h-16 bg-gray-500 font-extrabold" @click="push(0)">0</button>
-    <button
-      disabled
-      class="h-16 bg-gray-500 font-extrabold bg-gray-500 opacity-50 cursor-not-allowed"
-    />
-  </div>
+    <button class="h-16 bg-gray-500 font-extrabold" @click="$emit('switch')">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="inline-block h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+        />
+      </svg>
+    </button>
+  </section>
 </template>
 
 <script lang="ts">
@@ -38,21 +50,18 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   props: {
-    given: { type: Number, default: () => 0 },
+    value: { type: Number, default: () => 0 },
   },
-  emits: ["update:given"],
+  emits: ["update", "switch"],
   setup(props, context) {
     const push = (digit: number) => {
       context.emit(
-        "update:given",
-        Number([props.given || 0, digit].map(String).join(""))
+        "update",
+        Number([props.value || 0, digit].map(String).join(""))
       );
     };
     const pop = () => {
-      context.emit(
-        "update:given",
-        Number(String(props.given).slice(0, -1)) || 0
-      );
+      context.emit("update", Number(String(props.value).slice(0, -1)) || 0);
     };
     return { push, pop };
   },

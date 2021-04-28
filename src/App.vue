@@ -5,7 +5,12 @@
     </nav>
     <div class="flex-grow">
       <div class="h-full md:w-1/2 mx-auto flex flex-col justify-center">
-        <Center v-model:cost="cost" :given="given" :change="change" />
+        <Center
+          :cost="cost"
+          :given="given"
+          :change="change"
+          :selected="selected"
+        />
       </div>
     </div>
 
@@ -18,12 +23,25 @@
       >
         <template v-if="!Number.isInteger(change)">
           <Suggestions v-model:given="given" :cost="cost" class="flex-1" />
-          <NumPad v-model:given="given" class="flex-1" />
+          <NumPad
+            v-if="selected === 'cost'"
+            :value="cost"
+            class="flex-1"
+            @update="cost = $event"
+            @switch="selected = 'given'"
+          />
+          <NumPad
+            v-else-if="selected === 'given'"
+            :value="given"
+            class="flex-1"
+            @update="given = $event"
+            @switch="selected = 'cost'"
+          />
         </template>
         <template v-else>
           <button
             class="back flex-1 bg-purple-500 text-white text-lg font-extrabold py-4 px-12 border-2 border-transparent hover:border-white"
-            @click="change = undefined"
+            @click="back"
           >
             Zurück
           </button>
@@ -77,23 +95,35 @@ export default defineComponent({
           cost: undefined,
           given: undefined,
           change: undefined,
+          selected: "cost",
         }),
     },
   },
   setup(props) {
-    const { cost, given, change } = toRefs(props.initialData);
+    const { cost, given, change, selected } = toRefs(props.initialData);
     const reset = () => {
       cost.value = undefined;
       given.value = undefined;
       change.value = undefined;
+      selected.value = "cost";
     };
     const pay = () => {
-      change.value = change.value ? undefined : given.value - cost.value;
+      if (selected.value === "change") {
+        change.value = undefined;
+        selected.value = "cost";
+      } else {
+        change.value = given.value - cost.value;
+        selected.value = "change";
+      }
+    };
+    const back = () => {
+      change.value = undefined;
+      selected.value = "given";
     };
     const ready = computed(() => {
       return given.value >= cost.value;
     });
-    return { given, cost, change, pay, reset, ready };
+    return { given, cost, change, pay, reset, ready, selected, back };
   },
 });
 </script>

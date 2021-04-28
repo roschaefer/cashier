@@ -3,7 +3,7 @@ import App from './App.vue'
 import NumPad from './components/NumPad/NumPad.vue'
 import { ref } from 'vue'
 
-let props: { initialData?: { cost?: number, given?: number, change?: number } }
+let props: { initialData?: { cost?: number, given?: number, change?: number, selected?: string } }
 
 beforeEach(() => {
   props = {}
@@ -15,7 +15,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Cashier')
   })
 
-  describe('@click Pay <button>', () => {
+  describe('Pay <button>', () => {
     it('is disabled', async () => {
       const wrapper = mount(App, { props })
       expect(wrapper.get('button.pay').attributes()).toMatchObject({disabled: ''})
@@ -34,14 +34,22 @@ describe('App', () => {
             cost:765,
             given: 876,
             change: undefined,
+            selected: "cost",
           }
         }
       })
 
-      it('hides NumPad', async () => {
+      it('is enabled', async () => {
         const wrapper = mount(App, { props })
-        await wrapper.get('button.pay').trigger('click')
-        expect(wrapper.findComponent(NumPad).exists()).toBe(false)
+        expect(wrapper.get('button.pay').attributes('disabled')).toBeUndefined
+      })
+
+      describe('@click', () => {
+        it('hides NumPad', async () => {
+          const wrapper = mount(App, { props })
+          await wrapper.get('button.pay').trigger('click')
+          expect(wrapper.findComponent(NumPad).exists()).toBe(false)
+        })
       })
     })
   })
@@ -60,7 +68,8 @@ describe('App', () => {
         initialData: {
           cost:765,
           given: 876,
-          change: 876 - 765
+          change: 876 - 765,
+          selected: "cost",
         }
       }
     })
@@ -73,11 +82,11 @@ describe('App', () => {
       })
 
       it('renders <input> with previous `cost`', () => {
-        expect((wrapper.find('section.cost input').element as HTMLInputElement).value).toEqual('7,65 €')
+        expect((wrapper.find('label.cost input').element as HTMLInputElement).value).toEqual('7,65 €')
       })
 
-      it('renders section.given with previous `given`', async () => {
-        expect(wrapper.get('section.given').text()).toContain('Gegeben: 8,76 €')
+      it('renders label.given with previous `given`', async () => {
+        expect((wrapper.find('label.given input').element as HTMLInputElement).value).toEqual('8,76 €')
       })
     })
 
@@ -88,11 +97,11 @@ describe('App', () => {
       })
 
       it('resets `cost`', async () => {
-        expect((wrapper.find('section.cost input').element as HTMLInputElement).value).toEqual('')
+        expect((wrapper.find('label.cost input').element as HTMLInputElement).value).toEqual('')
       })
 
       it('resets `given`', async () => {
-        expect(wrapper.get('section.given').text()).toEqual('Gegeben:')
+        expect(wrapper.get('label.given').text()).toEqual('Gegeben:')
       })
     })
   })

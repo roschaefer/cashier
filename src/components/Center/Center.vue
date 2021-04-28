@@ -1,39 +1,53 @@
 <template>
-  <div class="space-y-1">
-    <section class="cost h-32 p-4 bg-white flex flex-col">
+  <section class="space-y-1">
+    <label
+      class="cost h-32 p-4 bg-white flex flex-col"
+      :class="{
+        'border-double border-b-8 border-green-300': selected === 'cost',
+      }"
+    >
       Zu zahlen:
-      <form v-if="!change" @submit.prevent="updateCost" @focusout="updateCost">
-        <input
-          v-model="updatedCost"
-          class="self-center w-full text-5xl text-center border-0"
-          placeholder="0,00 €"
-        />
-      </form>
-      <span v-else class="self-center w-full text-5xl text-center border-0">
-        {{ format(cost) }}
-      </span>
-    </section>
-    <section class="given h-32 p-4 bg-white flex flex-col">
+      <input
+        disabled
+        :value="format(cost)"
+        class="self-center bg-white w-full text-5xl text-center border-0"
+        placeholder="0,00 €"
+      />
+    </label>
+    <label
+      class="given h-32 p-4 bg-white flex flex-col"
+      :class="{
+        'border-double border-b-8 border-green-300': selected === 'given',
+      }"
+    >
       Gegeben:
-      <span class="self-center w-full text-5xl text-center border-0">
-        {{ format(given) }}
-      </span>
-    </section>
-    <section
+      <input
+        disabled
+        :value="format(given)"
+        class="self-center bg-white w-full text-5xl text-center border-0"
+        placeholder="0,00 €"
+      />
+    </label>
+    <label
       v-if="Number.isInteger(change)"
       class="change h-32 p-4 bg-white flex flex-col"
+      :class="{
+        'border-double border-b-8 border-green-300': selected === 'change',
+      }"
     >
       Wechselgeld:
-      <span class="self-center w-full text-5xl text-center border-0">
-        {{ format(change) }}
-      </span>
-    </section>
-  </div>
+      <input
+        disabled
+        :value="format(change)"
+        class="self-center bg-white w-full text-5xl text-center border-0"
+        placeholder="0,00 €"
+      />
+    </label>
+  </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from "vue";
-import currency from "currency.js";
+import { defineComponent } from "vue";
 
 const FORMAT = new Intl.NumberFormat("de-DE", {
   style: "currency",
@@ -41,7 +55,7 @@ const FORMAT = new Intl.NumberFormat("de-DE", {
 });
 
 export const format = (value: number) => {
-  if (!Number.isInteger(value)) return null;
+  if (!Number.isInteger(value)) return undefined;
   return FORMAT.format(value / 100.0);
 };
 
@@ -50,27 +64,10 @@ export default defineComponent({
     cost: { type: Number, default: () => null },
     given: { type: Number, default: () => null },
     change: { type: Number, default: () => null },
+    selected: { type: String, default: () => "cost" },
   },
-  emits: ["update:cost"],
-  setup(props, context) {
-    const updatedCost = ref(format(props.cost));
-
-    // TODO: remove workaround
-    watchEffect(() => {
-      updatedCost.value = format(props.cost);
-    });
-
-    const updateCost = () => {
-      const { value } = currency(updatedCost.value as any, {
-        separator: "",
-        decimal: ",",
-        symbol: "€",
-      });
-      context.emit("update:cost", value * 100);
-      updatedCost.value = format(value * 100);
-    };
-
-    return { updateCost, format, updatedCost };
+  setup() {
+    return { format };
   },
 });
 </script>
