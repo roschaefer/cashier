@@ -1,9 +1,10 @@
 <template>
   <section class="space-y-1">
     <label
-      class="cost h-32 p-4 bg-white flex flex-col"
+      class="cost h-32 p-4 bg-white flex flex-col border-4"
       :class="{
-        'border-double border-b-8 border-green-300': selected === 'cost',
+        'border-purple-500': selected === 'cost',
+        'border-white': selected !== 'cost',
       }"
     >
       Zu zahlen:
@@ -15,9 +16,10 @@
       />
     </label>
     <label
-      class="given h-32 p-4 bg-white flex flex-col"
+      class="given h-32 p-4 bg-white border-4 flex flex-col"
       :class="{
-        'border-double border-b-8 border-green-300': selected === 'given',
+        'border-purple-500': selected === 'given',
+        'border-white': selected !== 'given',
       }"
     >
       Gegeben:
@@ -30,9 +32,10 @@
     </label>
     <label
       v-if="Number.isInteger(change)"
-      class="change h-32 p-4 bg-white flex flex-col"
+      class="change h-32 p-4 bg-white flex flex-col border-4"
       :class="{
-        'border-double border-b-8 border-green-300': selected === 'change',
+        'border-purple-500': selected === 'change',
+        'border-white': selected !== 'change',
       }"
     >
       Wechselgeld:

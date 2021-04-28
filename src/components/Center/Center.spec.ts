@@ -14,8 +14,8 @@ describe('Center', () => {
       it('highlights label.cost', () => {
         props = { selected: 'cost' }
         const wrapper = mount(Center, { props })
-        expect(wrapper.get('label.cost').attributes('class')).toContain('border-double')
-        expect(wrapper.get('label.given').attributes('class')).not.toContain('border-double')
+        expect(wrapper.get('label.cost').attributes('class')).toContain('border-purple-500')
+        expect(wrapper.get('label.given').attributes('class')).toContain('border-white')
       })
     })
 
@@ -23,8 +23,8 @@ describe('Center', () => {
       it('highlights label.given', () => {
         props = { selected: 'given' }
         const wrapper = mount(Center, { props })
-        expect(wrapper.get('label.cost').attributes('class')).not.toContain('border-double')
-        expect(wrapper.get('label.given').attributes('class')).toContain('border-double')
+        expect(wrapper.get('label.cost').attributes('class')).toContain('border-white')
+        expect(wrapper.get('label.given').attributes('class')).toContain('border-purple-500')
       })
     })
   })
